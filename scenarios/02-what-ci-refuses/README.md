@@ -31,7 +31,7 @@ bash scenarios/02-what-ci-refuses/run.sh
 | another `_*.yaml` | `_` names are reserved for the switch and the generated baseline |
 | no `_baseline.generated.yaml` | the baseline is every person-device's starting set; CI requires it, and where the manifests are present, that it is not stale |
 
-## Run it on your change in your goatnet's repository
+## Run it on your change in the goatnet's configuration repository
 
 ```bash
 python3 ops/warrant/membership.py --check

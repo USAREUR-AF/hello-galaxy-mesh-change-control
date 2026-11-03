@@ -1,21 +1,23 @@
-# 04 — Read-only, on your own goatnet
+# 04 — Read-only, on a live goatnet
 
-The one scenario that reaches a goatnet. It proves two things on a goatnet you run, with
-your own credentials, and changes nothing:
+The one scenario that reaches a goatnet. It proves two things on a governed goatnet you have
+access to, with your own credentials, and changes nothing:
 
 1. the everyday dashboard's API door answers reads and refuses writes;
 2. the converger's report, run by you, agrees with the declaration.
 
-The other five scenarios run offline. If you do not have a goatnet, goatcore's
+The other five scenarios run offline. The goatnet can be
+EFDI, the shared sandbox goatnet that partners are onboarded to (if you are onboarded to it); <!-- oss-allow: operator-approved public example goatnet -->
+a goatlite you stand up yourself (goatcore's
 [goatlite quickstart](https://github.com/usareur-af/goatcore/blob/main/docs/tutorials/00-goatlite.md)
-and the [hello-galaxy-goatenv](https://github.com/usareur-af/hello-galaxy-goatenv)
-walkthrough stand one up.
+or the [hello-galaxy-goatenv](https://github.com/usareur-af/hello-galaxy-goatenv)
+walkthrough); or another goatnet you have access to.
 
 ```bash
-export MCC_SCOPE=<your scope>                 # e.g. zagros-dev; its groups are <SCOPE>-* upper-cased
-export MCC_SITE_ZONE=<your site zone>         # the read door is https://mgmt-read.<site zone>
+export MCC_SCOPE=<goatnet scope>              # the fixtures use zagros-dev; its groups are <SCOPE>-* upper-cased
+export MCC_SITE_ZONE=<goatnet site zone>      # the read door is https://mgmt-read.<site zone>
 export GOAT_NB_API_TOKEN=<your own NetBird personal access token>
-export GOAT_REPO=~/src/<your-goatnet-repo>    # optional: the repository holding ops/warrant/membership/<scope>/
+export GOAT_REPO=~/src/<goatnet-config-repo>  # optional: the repository holding ops/warrant/membership/<scope>/
 bash scenarios/04-live-read-only/run.sh
 ```
 
@@ -23,10 +25,10 @@ bash scenarios/04-live-read-only/run.sh
 
 | Need | How |
 |---|---|
-| Your goatnet's mesh | your NetBird client connected to that goatnet. The `mgmt-read.<site zone>` name resolves only there, and the first step says so if it does not |
-| Your own token | in your goatnet's NetBird dashboard, your user → access tokens. On a governed goatnet a platform or identity admin has the `auditor` role, so the token reads everything and changes nothing. Never use a service identity's token |
+| The goatnet's mesh | your NetBird client connected to that goatnet. The `mgmt-read.<site zone>` name resolves only there, and the first step says so if it does not |
+| Your own token | in the goatnet's NetBird dashboard, your user → access tokens. On a governed goatnet a platform or identity admin has the `auditor` role, so the token reads everything and changes nothing. Never use a service identity's token |
 | The goat CLI | built from [goatcore](https://github.com/usareur-af/goatcore) (`crates/goat-cli`), with `goat warrant apply --membership`. Steps 6 and 7 pass the scope DIRECTORY as `--file` |
-| The real declaration (optional) | `GOAT_REPO` pointing at your goatnet's repository, or `MCC_MEMBERSHIP_DIR` at the scope directory `ops/warrant/membership/<scope>/`. Without it, step 7 still runs a what-if |
+| The real declaration (optional) | `GOAT_REPO` pointing at the goatnet's configuration repository, or `MCC_MEMBERSHIP_DIR` at the scope directory `ops/warrant/membership/<scope>/`. Without it, step 7 still runs a what-if |
 
 ## What it does
 

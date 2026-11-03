@@ -85,5 +85,5 @@ mc_honest "lib/mcc/narrowing.py re-implements the prover. It was checked to retu
 mc_honest "goat's prover for every case here; if the two ever disagree, goat's is right."
 
 echo
-mc_say "Next: bash scenarios/04-live-read-only/run.sh   (needs your own goatnet's mesh and your token)"
+mc_say "Next: bash scenarios/04-live-read-only/run.sh   (needs a live goatnet's mesh and your token on it)"
 mc_summary

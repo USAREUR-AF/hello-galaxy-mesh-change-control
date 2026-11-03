@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Scenario 04 — LIVE, READ-ONLY: the read-only dashboard door and the converger's
-# report, against your own goatnet, with your own NetBird token.
+# report, against a live goatnet, with your own NetBird token.
 #
-# Needs: your own goatnet's mesh joined (the read door's name is mesh-only), its
+# Needs: the goatnet's mesh joined (the read door's name is mesh-only), its
 # scope in MCC_SCOPE and its zone in MCC_SITE_ZONE, a NetBird personal access token
 # of your own in GOAT_NB_API_TOKEN, curl, and for the last steps the goat CLI. Changes nothing: every request is a read, or a write
 # the door refuses (and whose body is invalid, so it could create nothing even
@@ -14,7 +14,7 @@ mc_preflight || exit 1
 SCOPE="${MCC_SCOPE:-}"
 SITE_ZONE="${MCC_SITE_ZONE:-}"
 if [ -z "$SCOPE" ] || [ -z "$SITE_ZONE" ]; then
-  mc_fail "set MCC_SCOPE (your goatnet's scope, e.g. zagros-dev) and MCC_SITE_ZONE (its zone,"
+  mc_fail "set MCC_SCOPE (the goatnet's scope; the fixtures use zagros-dev) and MCC_SITE_ZONE (its zone,"
   mc_fail "the part after mgmt-read. in your read door's name), then run this again."
   mc_note "this is the one scenario that needs a goatnet. Scenarios 01, 02, 03 and 05 run offline."
   exit 2
@@ -26,7 +26,7 @@ GOAT="${GOAT_BIN:-goat}"
 
 mc_banner "Live, read-only — the dashboard is for looking" \
           "$SCOPE: GET is answered, a write is refused at the door; the converger reports." \
-          "against your goatnet ($SCOPE) — reads only"
+          "against the goatnet ($SCOPE) — reads only"
 
 mc_step "Are you on the $SCOPE mesh?"
 mc_cmd "resolve mgmt-read.${SITE_ZONE}"
@@ -35,7 +35,7 @@ if "$MC_PY" -c "import socket,sys; socket.getaddrinfo(sys.argv[1], 443)" "mgmt-r
   ON_MESH=1
 else
   mc_fail "mgmt-read.${SITE_ZONE} does not resolve"
-  mc_note "the read door's name exists only inside your goatnet's mesh. Connect your NetBird"
+  mc_note "the read door's name exists only inside the goatnet's mesh. Connect your NetBird"
   mc_note "client to that goatnet and run this again."
   ON_MESH=0
   MC_FAIL=$((MC_FAIL+1))
@@ -54,7 +54,7 @@ fi
 if [ -z "$TOKEN" ]; then
   mc_step "Your token"
   mc_fail "GOAT_NB_API_TOKEN is not set"
-  mc_note "create a personal access token for YOUR user in your goatnet's NetBird dashboard"
+  mc_note "create a personal access token for YOUR user in the goatnet's NetBird dashboard"
   mc_note "(your user -> access tokens), then:  export GOAT_NB_API_TOKEN=<token>"
   mc_note "it carries your own role. On a governed goatnet that is auditor for platform and identity admins:"
   mc_note "it can read every peer and group and change nothing."
@@ -119,7 +119,7 @@ else
   GOAT_OK=0; MC_FAIL=$((MC_FAIL+1))
 fi
 
-# The declaration to report against: your scope directory, if your goatnet's repository is checked out.
+# The declaration to report against: the scope directory, if the goatnet's configuration repository is checked out.
 REAL=""
 if [ -n "${MCC_MEMBERSHIP_DIR:-}" ]; then REAL="$MCC_MEMBERSHIP_DIR"
 elif [ -n "${GOAT_REPO:-}" ] && [ -f "$GOAT_REPO/ops/warrant/membership/$SCOPE/_scope.yaml" ]; then
@@ -142,7 +142,7 @@ if [ "$ON_MESH" = 1 ] && [ -n "$TOKEN" ] && [ "$GOAT_OK" = 1 ] && [ -n "$REAL" ]
   mc_note "in enforce mode as svc-<site>-warrant. 'every peer holds what the declaration says'"
   mc_note "means nobody has hand-edited membership since its last pass."
 elif [ -z "$REAL" ]; then
-  mc_warn "no real declaration: set GOAT_REPO to your goatnet's repository (or MCC_MEMBERSHIP_DIR to the scope directory)"
+  mc_warn "no real declaration: set GOAT_REPO to the goatnet's configuration repository (or MCC_MEMBERSHIP_DIR to the scope directory)"
   mc_note "without it, the what-if below stands in for this step"
 else
   mc_skip "needs the mesh, a token and the goat CLI"

@@ -4,7 +4,7 @@
 Which peer holds which group, and which groups may reach which, change through
 warrant: a reviewed diff in git, applied by a machine account. This repo lets you
 predict what that machine will do, see what CI refuses and why, and rehearse the pull
-request, mostly on a laptop and once, read-only, against your own goatnet.**
+request, mostly on a laptop and once, read-only, against a live goatnet.**
 
 The decision is goat [ADR 1189](https://github.com/usareur-af/goatcore/blob/main/docs/adr/1189-netbird-read-only-dashboard-and-warrant-owned-membership.md)
 ("The NetBird dashboard is read-only by default, and warrant owns peer membership"). The
@@ -23,7 +23,7 @@ The examples use a made-up goatnet whose scope is `zagros-dev` (group prefix
   refused entry is refused;
 - tell from a diff whether it only takes access away (it merges on one owner's click)
   or gives something back (it waits for review);
-- prove on your own goatnet that the everyday dashboard's API door answers reads and
+- prove on a live goatnet that the everyday dashboard's API door answers reads and
   refuses writes, and run the converger's report yourself;
 - answer "why can't A reach B?" by checking the declared ACL before writing a rule.
 
@@ -52,12 +52,13 @@ then the converger only reports.
 
 Prerequisites: Python 3.9 or later with PyYAML, `git`, `bash`. Scenarios 01, 02, 03
 and 05 need nothing else and are the default path. Scenario 04 also needs `curl`, a
-goatnet of your own with its mesh joined, your own NetBird token and a current goat CLI;
-scenario 06 needs the goat CLI. The goat CLI is built from
-[goatcore](https://github.com/usareur-af/goatcore) (`crates/goat-cli`); to stand up a
-goatnet, start at goatcore's
-[goatlite quickstart]({GC}docs/tutorials/00-goatlite.md) or the
-[hello-galaxy-goatenv](https://github.com/usareur-af/hello-galaxy-goatenv) walkthrough.
+governed goatnet you have access to with its mesh joined, your own NetBird token on it and
+a current goat CLI; scenario 06 needs the goat CLI. Any appropriate goatnet works:
+EFDI, the shared sandbox goatnet that partners are onboarded to (if you are onboarded to it); <!-- oss-allow: operator-approved public example goatnet -->
+a goatlite you stand up yourself (goatcore's [goatlite quickstart](https://github.com/usareur-af/goatcore/blob/main/docs/tutorials/00-goatlite.md)
+or the [hello-galaxy-goatenv](https://github.com/usareur-af/hello-galaxy-goatenv) walkthrough);
+or another goatnet you have access to. The goat CLI is built from
+[goatcore](https://github.com/usareur-af/goatcore) (`crates/goat-cli`).
 
 ```bash
 pip install -r requirements.txt          # PyYAML, pytest
@@ -65,7 +66,7 @@ pip install -r requirements.txt          # PyYAML, pytest
 bash scenarios/01-predict-the-plan/run.sh        # offline
 bash scenarios/02-what-ci-refuses/run.sh         # offline
 bash scenarios/03-narrowing-vs-widening/run.sh   # offline
-bash scenarios/04-live-read-only/run.sh          # your goatnet, read-only
+bash scenarios/04-live-read-only/run.sh          # a live goatnet, read-only
 bash scenarios/05-the-pull-request/run.sh        # offline rehearsal; read its README for the real steps
 bash scenarios/06-why-blocked/run.sh             # offline, needs goat
 
@@ -83,8 +84,8 @@ to change it.
 | [01-predict-the-plan](scenarios/01-predict-the-plan) | nothing | the desired-membership table on ten made-up peers: the declared baseline (from manifests) and the key baseline, grant/absent, exact, hold, unknown, a coverage-gate block, a missing peer, groups of other prefixes left alone; quarantine then release; the two gates in front of enforce |
 | [02-what-ci-refuses](scenarios/02-what-ci-refuses) | nothing | sixteen declarations CI refuses, each with the reason the rule exists — `EXTERNAL-INFRA` beside a person role, `PLATFORM-ADMIN` on a machine, a hold with no expiry, `converge:` outside `_scope.yaml`, and twelve more |
 | [03-narrowing-vs-widening](scenarios/03-narrowing-vs-widening) | nothing | twenty-two small diffs graded the way CI grades them: which merge on one owner's click, which wait for review, why a release is a widening, why moving an entry between fragments is no change, and how a manifest change to the baseline grades |
-| [04-live-read-only](scenarios/04-live-read-only) | your goatnet's mesh, your token, goat CLI | GET on `mgmt-read.<site>/api/groups` → 200, POST → 403; `goat warrant apply --membership --mode report` against your declaration and against a what-if copy |
-| [05-the-pull-request](scenarios/05-the-pull-request) | nothing (the README is the procedure) | exactly how to add a grant, a hold and a release to `ops/warrant/membership/<scope>/` in your goatnet's repository, what CI checks, and what happens after merge; the script rehearses all three in a scratch repository |
+| [04-live-read-only](scenarios/04-live-read-only) | the goatnet's mesh, your token, goat CLI | GET on `mgmt-read.<site>/api/groups` → 200, POST → 403; `goat warrant apply --membership --mode report` against your declaration and against a what-if copy |
+| [05-the-pull-request](scenarios/05-the-pull-request) | nothing (the README is the procedure) | exactly how to add a grant, a hold and a release to `ops/warrant/membership/<scope>/` in the goatnet's configuration repository, what CI checks, and what happens after merge; the script rehearses all three in a scratch repository |
 | [06-why-blocked](scenarios/06-why-blocked) | goat | `goat warrant why-blocked`: PERMITTED, BLOCKED with the smallest fix, a refused question, a one-way path that is correct — and when the answer is membership, not a rule |
 
 ## What needs a goatnet token, and what does not
@@ -93,7 +94,7 @@ to change it.
 |---|---|---|---|
 | Scenarios 01, 02, 03, 05 and the tests | no | no | no |
 | Scenario 06 | no | no | yes (it reads the ACL compiled into goat) |
-| Scenario 04 | **your own** NetBird personal access token, in `GOAT_NB_API_TOKEN` | **your goatnet's** — the `mgmt-read` name is mesh-only | built from goatcore |
+| Scenario 04 | **your own** NetBird personal access token, in `GOAT_NB_API_TOKEN` | **the goatnet's** — the `mgmt-read` name is mesh-only | built from goatcore |
 
 Use your own token, never a service identity's. On a governed goatnet a platform or
 identity admin's token carries the `auditor` role: it can read every peer and group and
@@ -129,7 +130,7 @@ tests/                   pytest for the offline model
 | `lib/mcc/baseline.py` (a re-implementation) | `ops/warrant/membership.py --generate-baseline`, run by whoever changes a manifest; `--check` fails a stale file where the manifests are present | `ops/warrant/membership/<scope>/_baseline.generated.yaml` |
 | `lib/mcc/narrowing.py` (a re-implementation) | `ops/ci/check-warrant-narrowing.py --membership`, same workflow; posts the verdict as a PR comment | same |
 | `fixtures/mgmt-state/zagros-dev.json` (made up) | the peers, groups, setup keys and event log of the management server | NetBird management API |
-| scenario 04 | the real thing, read-only | your goatnet |
+| scenario 04 | the real thing, read-only | the goatnet you are using |
 | scenario 06 | the real thing; it needs no goatnet | goat CLI |
 
 `rules.py` and `narrowing.py` were checked to give the same verdicts and messages as

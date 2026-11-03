@@ -98,6 +98,6 @@ mc_honest "the checks here are this repo's re-implementations; in goat, CI runs 
 mc_honest "the plan here is computed from fixtures; in goat, the converger reads the live goatnet."
 
 echo
-mc_say "The real steps, in your goatnet's repository: scenarios/05-the-pull-request/README.md"
+mc_say "The real steps, in the goatnet's configuration repository: scenarios/05-the-pull-request/README.md"
 mc_say "Next: bash scenarios/06-why-blocked/run.sh"
 mc_summary

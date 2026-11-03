@@ -45,7 +45,7 @@ bash scenarios/03-narrowing-vs-widening/run.sh
 The shape to notice: **containment is fast, giving access back is reviewed.** A
 quarantine merges on one click; its release waits for review.
 
-## Predict the verdict on your change in your goatnet's repository
+## Predict the verdict on your change in the goatnet's configuration repository
 
 ```bash
 rm -rf /tmp/base && mkdir -p /tmp/base

@@ -2,8 +2,9 @@
 
 This is the procedure for changing who holds which group on a governed goatnet: a
 grant, a hold (quarantine) and a release, each as a pull request in the repository that
-holds your goatnet's declarations (`ops/warrant/membership/<scope>/`, beside goatcore's
-`ops/warrant/membership.py`). The examples use scope `zagros-dev`; substitute your own.
+holds the goatnet's declarations (`ops/warrant/membership/<scope>/`, beside goatcore's
+`ops/warrant/membership.py`). The examples use scope `zagros-dev`; substitute the scope of the
+goatnet you are using.
 The script beside this file only rehearses it in a scratch repository under `.run/`,
 with this repo's copies of CI's two checks; it touches no other repository.
 
@@ -13,7 +14,8 @@ bash scenarios/05-the-pull-request/run.sh     # the rehearsal
 
 ## What you need
 
-- Write access to your goatnet's repository (to push a branch and open a pull request).
+- Write access to the goatnet's configuration repository (to push a branch and open a pull
+  request). Its operators grant that; you already have it if you are one.
 - Python 3 with PyYAML, to run the two checks locally.
 - Nothing on the goatnet. You never touch the NetBird dashboard for this.
 
@@ -162,7 +164,7 @@ cd ops/ansible
 
 It needs `svc-zagros-dev-warrant`'s token in the shell as `ZAGROS_DEV_WARRANT_NB_API_TOKEN`,
 so if you are not a platform admin, ask one and link the merged pull request. Use the
-inventory that defines your goatnet's host group (`zagros_dev_hosts` here).
+inventory that defines the goatnet's host group (`zagros_dev_hosts` here).
 
 The directory lands at `/etc/goat/warrant/membership/zagros-dev/` on the management host
 (mirrored: a fragment deleted in the repo is deleted there too).
