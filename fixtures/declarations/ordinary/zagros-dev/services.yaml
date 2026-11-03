@@ -1,0 +1,8 @@
+# External-service hosts: EXTERNAL-INFRA alone (ADR 1178).
+version: 1
+entries:
+  - peer: demo-service-01
+    exact: [ZAGROS-DEV-EXTERNAL-INFRA]        # the whole set; its key is ignored
+    owner: platform-admins
+    reason: external service host (ADR 1178)
+    expires: 2026-12-31

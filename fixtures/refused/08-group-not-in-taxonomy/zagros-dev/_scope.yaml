@@ -1,0 +1,4 @@
+# A group name the scope's taxonomy does not declare (a typo).
+version: 1
+scope: zagros-dev
+converge: enforce

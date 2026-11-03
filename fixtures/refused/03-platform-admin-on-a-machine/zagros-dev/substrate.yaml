@@ -1,0 +1,8 @@
+# Substrate and other machines.
+version: 1
+entries:
+  - peer: mgmt-demo-01
+    grant: [ZAGROS-DEV-PLATFORM-ADMIN]
+    owner: platform-admins
+    reason: so the host can reach everything
+    expires: 2026-12-31

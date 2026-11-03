@@ -1,0 +1,4 @@
+# NO CHANGE — alice's entry moved, unchanged, from people.yaml into orgs/demo-org.yaml.
+version: 1
+scope: zagros-dev
+converge: enforce

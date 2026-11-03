@@ -1,0 +1,4 @@
+# A quarantine with no review date.
+version: 1
+scope: zagros-dev
+converge: enforce

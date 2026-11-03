@@ -1,0 +1,4 @@
+# WIDENING — alice also gets MONITOR.
+version: 1
+scope: zagros-dev
+converge: enforce

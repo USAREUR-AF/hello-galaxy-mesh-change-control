@@ -1,0 +1,4 @@
+# The membership file before each change in scenario 03. Made-up peers.
+version: 1
+scope: zagros-dev
+converge: enforce

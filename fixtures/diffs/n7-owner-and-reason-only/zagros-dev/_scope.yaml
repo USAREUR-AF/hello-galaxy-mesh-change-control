@@ -1,0 +1,4 @@
+# NARROWING (no access change) — owner and reason edited.
+version: 1
+scope: zagros-dev
+converge: enforce

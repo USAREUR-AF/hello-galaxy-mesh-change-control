@@ -1,0 +1,4 @@
+# EXTERNAL-INFRA held beside another group in an exact list.
+version: 1
+scope: zagros-dev
+converge: enforce

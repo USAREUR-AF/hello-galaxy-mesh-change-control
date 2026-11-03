@@ -1,0 +1,57 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-test-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: shellcheck the scripts
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          # SC1090/SC1091: drivers source the lib at runtime.
+          # SC2034: cross-file globals set in the lib, read by sourcing scripts.
+          shellcheck -e SC1090,SC1091,SC2034 lib/hello-mcc.sh scenarios/*/run.sh
+
+      - name: every scenario has a README and an executable run.sh
+        run: |
+          rc=0
+          for d in scenarios/*/; do
+            [ -f "$d/README.md" ] || { echo "missing README: $d"; rc=1; }
+            [ -f "$d/run.sh" ]   || { echo "missing run.sh: $d"; rc=1; }
+            [ -x "$d/run.sh" ]   || { echo "not executable: $d/run.sh"; rc=1; }
+            bash -n "$d/run.sh"  || { echo "syntax error: $d/run.sh"; rc=1; }
+          done
+          [ -x bin/mcc ] || { echo "not executable: bin/mcc"; rc=1; }
+          exit $rc
+
+      - name: install the laptop dependencies
+        run: python3 -m pip install --quiet -r requirements.txt
+
+      - name: the offline model's tests
+        run: python3 -m pytest -q tests
+
+      - name: scenario 01 — predict the plan
+        run: NO_COLOR=1 bash scenarios/01-predict-the-plan/run.sh
+
+      - name: scenario 02 — what CI refuses
+        run: NO_COLOR=1 bash scenarios/02-what-ci-refuses/run.sh
+
+      - name: scenario 03 — narrowing vs widening
+        run: NO_COLOR=1 bash scenarios/03-narrowing-vs-widening/run.sh
+
+      - name: scenario 05 — the pull request, rehearsed
+        run: NO_COLOR=1 bash scenarios/05-the-pull-request/run.sh
+
+      # Scenario 04 needs a goatnet's mesh and a person's own token, and
+      # scenario 06 needs the goat CLI. Neither belongs in CI: a runner has no
+      # mesh identity, and giving it one is the thing ADR 1189 exists to avoid.
+      # Both are syntax-checked above.

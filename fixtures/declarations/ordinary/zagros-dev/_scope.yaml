@@ -1,0 +1,5 @@
+# Scenario 01's declaration — a membership declaration on an ordinary day.
+# Same shape as goat's ops/warrant/membership/<scope>/; every peer is made up.
+version: 1
+scope: zagros-dev
+converge: enforce

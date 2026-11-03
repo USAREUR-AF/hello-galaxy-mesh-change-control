@@ -1,0 +1,7 @@
+# An org's own fragment.
+version: 1
+entries:
+  - peer: peer-alice-zagros-dev-2026-09-01-laptop
+    absent: [ZAGROS-DEV-OBSERVER]
+    owner: alice
+    reason: no longer observing

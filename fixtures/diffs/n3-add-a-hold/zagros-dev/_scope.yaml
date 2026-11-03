@@ -1,0 +1,4 @@
+# NARROWING — erin quarantined (her grant entry replaced by a hold).
+version: 1
+scope: zagros-dev
+converge: enforce

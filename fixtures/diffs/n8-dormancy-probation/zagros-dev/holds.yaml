@@ -1,0 +1,12 @@
+# Holds: quarantine, and dormancy (PROBATION) lanes.
+version: 1
+entries:
+  - peer: peer-carol-zagros-dev-2026-09-03-laptop
+    hold: quarantine
+    owner: platform-admins
+    reason: signal flood from this device
+    expires: 2026-09-30
+  - peer: peer-dave-zagros-dev-2026-09-04-desktop
+    exact: [ZAGROS-DEV-PROBATION-DEVELOPER]
+    owner: platform-admins
+    reason: dormant 60 days

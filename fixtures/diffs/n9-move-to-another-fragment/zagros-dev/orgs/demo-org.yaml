@@ -1,0 +1,9 @@
+# The demo org's own fragment: its people's entries, filed together.
+version: 1
+entries:
+  - peer: peer-alice-zagros-dev-2026-09-01-laptop
+    grant: [ZAGROS-DEV-P2P]
+    absent: [ZAGROS-DEV-OBSERVER]
+    owner: alice
+    reason: development clique
+    expires: 2026-12-01

@@ -1,0 +1,4 @@
+# NARROWING — a new exact entry holding only a probation lane (what the lifecycle sweep writes).
+version: 1
+scope: zagros-dev
+converge: enforce

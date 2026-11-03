@@ -1,0 +1,4 @@
+# grant and hold in one entry: exactly one form is allowed.
+version: 1
+scope: zagros-dev
+converge: enforce

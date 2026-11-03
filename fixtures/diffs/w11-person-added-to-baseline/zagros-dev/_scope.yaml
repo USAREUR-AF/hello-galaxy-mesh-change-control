@@ -1,0 +1,4 @@
+# WIDENING — dave gets a manifest: his peer stops being unknown and is planned from it.
+version: 1
+scope: zagros-dev
+converge: enforce

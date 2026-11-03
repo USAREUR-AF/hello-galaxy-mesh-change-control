@@ -1,0 +1,4 @@
+# NARROWING — alice's grant now ends sooner.
+version: 1
+scope: zagros-dev
+converge: enforce

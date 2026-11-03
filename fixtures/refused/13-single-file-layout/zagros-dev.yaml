@@ -1,0 +1,5 @@
+# The retired single-file layout: one zagros-dev.yaml instead of a directory.
+version: 1
+scope: zagros-dev
+converge: enforce
+entries: []

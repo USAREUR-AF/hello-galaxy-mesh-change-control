@@ -1,0 +1,4 @@
+# EXTERNAL-INFRA granted on top of a key baseline — a person's device carrying service-host reach.
+version: 1
+scope: zagros-dev
+converge: enforce

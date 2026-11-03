@@ -1,0 +1,11 @@
+# Substrate and other machines.
+version: 1
+entries:
+  - peer: mgmt-demo-01
+    exact: [ZAGROS-DEV-INFRA]
+    owner: platform-admins
+    reason: management host; its bootstrap key granted no group
+  - peer: sensor-demo-01
+    grant: [ZAGROS-DEV-KID]
+    owner: platform-admins
+    reason: test of a group no enabled policy covers

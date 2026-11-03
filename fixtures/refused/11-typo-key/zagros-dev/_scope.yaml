@@ -1,0 +1,4 @@
+# grants: instead of grant: — an unknown key, not silently 'no change'.
+version: 1
+scope: zagros-dev
+converge: enforce

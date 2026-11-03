@@ -1,0 +1,208 @@
+#!/usr/bin/env python3
+"""mcc — run the offline model of goat's membership control.
+
+    mcc plan     --decl DIR [--live FILE] [--mode report|enforce] [--max-changes N]
+    mcc check    DIR... [--today YYYY-MM-DD]
+    mcc diff     BASE_DIR HEAD_DIR      (either may be '-' for "absent on that side")
+    mcc baseline [--manifests DIR] [--scope S] [--write DIR | --check DIR]
+
+A declaration is a scope DIRECTORY (`<...>/zagros-dev/`): _scope.yaml, fragment
+files, and _baseline.generated.yaml. `baseline` generates that last file from
+the made-up operator manifests in fixtures/manifests/.
+
+`plan` prints the table `goat warrant apply --membership` prints, computed
+from a fixture instead of a live management server. `--mode enforce` here
+changes nothing either: it runs the two gates enforce runs (the converge
+ceiling and --max-changes) and says what would be applied.
+
+`check` is the CI schema/tier check; `diff` is the narrowing prover.
+Exit codes follow goat's: 0 ok, 1 violation / widening, 2 ceiling refusal or
+unreadable input, 3 --max-changes refusal.
+"""
+
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "lib"))
+
+import yaml  # noqa: E402
+
+from mcc import baseline, layout, model, narrowing, rules  # noqa: E402
+
+DEFAULT_LIVE = ROOT / "fixtures" / "mgmt-state" / "zagros-dev.json"
+DEFAULT_TAXONOMY = ROOT / "fixtures" / "taxonomy.yaml"
+DEFAULT_MANIFESTS = ROOT / "fixtures" / "manifests"
+# The scenarios pin "today" so their dates do not rot. Override with MCC_TODAY.
+DEFAULT_TODAY = os.environ.get("MCC_TODAY", "2026-09-23")
+
+
+def load_decl(path: str) -> dict | None:
+    try:
+        return layout.load_decl(path)
+    except layout.LayoutError as exc:
+        print(f"mcc: {exc}", file=sys.stderr)
+        sys.exit(2)
+
+
+def load_taxonomy(path: Path = DEFAULT_TAXONOMY) -> dict:
+    return yaml.safe_load(path.read_text())["scopes"]
+
+
+def longer_prefixes(taxonomy: dict, prefix: str) -> tuple[str, ...]:
+    return tuple(sorted(s["site_prefix"] for s in taxonomy.values()
+                        if s["site_prefix"].startswith(prefix + "-")))
+
+
+def cmd_plan(a) -> int:
+    decl = load_decl(a.decl)
+    live = json.loads(Path(a.live).read_text())
+    tax = load_taxonomy()
+    prefix = model.scope_prefix(decl["scope"])
+    try:
+        mode = model.effective_mode(a.mode, decl.get("converge", "report"))
+    except model.Refused as r:
+        sys.stdout.flush()
+        print(r, file=sys.stderr)
+        return r.code
+    plan = model.plan_membership(
+        decl,
+        live["peers"],
+        model.key_baselines(live["events"], live["setup_keys"], live["groups"]),
+        set(live["covered_groups"]),
+        {g["name"] for g in live["groups"]},
+        longer_prefixes(tax, prefix),
+        model.minting_keys(live["events"], live["setup_keys"]),
+    )
+    print(f"warrant membership — scope {plan.scope} (managed prefix {prefix}-), mode {mode}  [OFFLINE MODEL]\n")
+    shown = [r for r in plan.rows if r.status != model.MATCH or a.all]
+    if not shown:
+        print("every peer holds what the declaration says.")
+    else:
+        print(f"{'PEER':<40} {'STATUS':<13} {'ADD':<30} REMOVE")
+        for r in shown:
+            print(f"{r.peer:<40} {r.status:<13} {','.join(r.add) or '-':<30} {','.join(r.remove) or '-'}")
+            if a.all and r.baseline_source:
+                print(f"{'':<40} baseline: {r.baseline_source}")
+            if r.note:
+                print(f"{'':<40} {r.note}")
+            if a.all and r.unmanaged:
+                print(f"{'':<40} unmanaged, never touched: {', '.join(r.unmanaged)}")
+    c = plan.count
+    print(f"\npeers {len([r for r in plan.rows if r.status != model.MISSING_PEER])}  "
+          f"match {c(model.MATCH)}  drift {c(model.DRIFT) + c(model.BLOCKED)} (blocked {c(model.BLOCKED)})  "
+          f"unknown {c(model.UNKNOWN)}  missing-peer {c(model.MISSING_PEER)}  "
+          f"changes planned {plan.changes_planned}")
+    if mode == "report":
+        if plan.changes_planned:
+            print("report mode — nothing changed.")
+        return 0
+    try:
+        model.check_max_changes(plan.changes_planned, a.max_changes)
+    except model.Refused as r:
+        sys.stdout.flush()
+        print(r, file=sys.stderr)
+        return r.code
+    print(f"enforce: would make {plan.changes_planned} change(s) — every add first, re-read, then every "
+          "remove. (This model changes nothing.)")
+    return 0
+
+
+def cmd_check(a) -> int:
+    tax = load_taxonomy()
+    today = dt.date.fromisoformat(a.today)
+    bad = 0
+    for f in a.files:
+        errs = layout.validate_layout(f, tax)
+        if not Path(f).is_file():
+            d = load_decl(f)
+            errs += rules.validate(d, tax, today, stem=Path(f).name, labels=d["labels"])
+        if errs:
+            bad += len(errs)
+            print(f"FAIL {f}")
+            for e in errs:
+                print(f"  - {e}")
+        else:
+            print(f"ok   {f}")
+    return 1 if bad else 0
+
+
+def cmd_diff(a) -> int:
+    base, head = load_decl(a.base), load_decl(a.head)
+    wide, narrow = narrowing.membership_changes(base, head)
+    scope = (head or base or {}).get("scope") or "?"
+    if wide:
+        print(f"warrant: this membership change on {scope} WIDENS — it is not auto-approvable.")
+        for line in wide + narrow:
+            print(f"    {line}")
+        print("  A widening waits for the owner CODEOWNERS names for the path. That is the gate working.")
+        return 1
+    if narrow:
+        print(f"warrant: proven NARROWING of {scope} membership — {len(narrow)} "
+              f"entr{'y' if len(narrow) == 1 else 'ies'} changed, none grants.")
+        for line in narrow:
+            print(f"    {line}")
+        return 0
+    print(f"warrant: no change to {scope} membership.")
+    return 0
+
+
+def cmd_baseline(a) -> int:
+    tax = load_taxonomy()
+    try:
+        text = baseline.render(baseline.generate(a.scope, tax, baseline.load_manifests(Path(a.manifests))))
+    except baseline.BaselineError as exc:
+        print(f"mcc: {exc}", file=sys.stderr)
+        return 2
+    if a.write:
+        (Path(a.write) / layout.BASELINE_FILE).write_text(text)
+        print(f"wrote {Path(a.write) / layout.BASELINE_FILE}")
+        return 0
+    if a.check:
+        have = (Path(a.check) / layout.BASELINE_FILE)
+        if have.is_file() and have.read_text() == text:
+            print(f"ok   {have} matches the manifests")
+            return 0
+        print(f"FAIL {have} is out of date with the manifests — regenerate it (bin/mcc baseline --write)")
+        return 1
+    sys.stdout.write(text)
+    return 0
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    p = sub.add_parser("plan")
+    p.add_argument("--decl", required=True)
+    p.add_argument("--live", default=str(DEFAULT_LIVE))
+    p.add_argument("--mode", choices=("report", "enforce"), default="report")
+    p.add_argument("--max-changes", type=int, default=model.DEFAULT_MAX_CHANGES)
+    p.add_argument("--all", action="store_true", help="also show matching peers and unmanaged groups")
+    p.set_defaults(fn=cmd_plan)
+    c = sub.add_parser("check")
+    c.add_argument("files", nargs="+")
+    c.add_argument("--today", default=DEFAULT_TODAY)
+    c.set_defaults(fn=cmd_check)
+    d = sub.add_parser("diff")
+    d.add_argument("base")
+    d.add_argument("head")
+    d.set_defaults(fn=cmd_diff)
+    b = sub.add_parser("baseline")
+    b.add_argument("--manifests", default=str(DEFAULT_MANIFESTS))
+    b.add_argument("--scope", default="zagros-dev")
+    g = b.add_mutually_exclusive_group()
+    g.add_argument("--write", metavar="DIR")
+    g.add_argument("--check", metavar="DIR")
+    b.set_defaults(fn=cmd_baseline)
+    a = ap.parse_args()
+    return a.fn(a)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,4 @@
+# NARROWING — the management host's exact list loses MONITOR.
+version: 1
+scope: zagros-dev
+converge: enforce

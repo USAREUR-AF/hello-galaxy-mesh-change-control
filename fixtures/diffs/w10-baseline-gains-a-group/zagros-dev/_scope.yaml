@@ -1,0 +1,4 @@
+# WIDENING — bob's manifest gains PLATFORM-ADMIN, so every one of his devices would.
+version: 1
+scope: zagros-dev
+converge: enforce

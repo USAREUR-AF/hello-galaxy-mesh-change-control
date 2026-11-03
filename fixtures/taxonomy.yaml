@@ -1,0 +1,88 @@
+# The two taxonomy scopes these scenarios use: their site prefix and the group
+# suffixes each declares. Copied from goatcore's ops/ansible/netbird_acl_taxonomy.yml.
+# On a goatnet the checker reads the real file; this is a snapshot.
+scopes:
+  zagros-dev:
+    site_prefix: ZAGROS-DEV
+    suffixes:
+      - INFRA
+      - EXTERNAL-INFRA
+      - PLATFORM-ADMIN
+      - MONITOR
+      - DEVELOPER
+      - OBSERVER
+      - PROBATION-PLATFORM-ADMIN
+      - PROBATION-MONITOR
+      - PROBATION-DEVELOPER
+      - PROBATION-OBSERVER
+      - PROBATION-MOON
+      - PROBATION-POD
+      - QUARANTINED
+      - MOON
+      - POD
+      - NETWORK
+      - BREAKGLASS
+      - NETWORK-JUMP
+      - P2P
+      - BACKEND-INFRA
+      - PUBLIC-INFRA
+      - HANDSET
+      - SENSOR-FEED
+      - SENSOR-TASKING
+      - SENSOR-TELEMETRY
+      - SENSOR-ARBITER
+      - EFFECTOR-CUE
+      - EFFECTOR-TRACK
+      - EFFECTOR-TELEMETRY
+      - EFFECTOR-COMMAND
+      - EFFECTOR-ARBITER
+      - KID
+      - EXTERNAL-KID
+      - EXTERNAL-INTERMEDIARY
+      - FUSION
+      - SENSOR
+      - EFFECTOR
+      - CONTROL
+      - PROBATION-GEAR
+  zagros:
+    site_prefix: ZAGROS
+    suffixes:
+      - INFRA
+      - EXTERNAL-INFRA
+      - PLATFORM-ADMIN
+      - MONITOR
+      - DEVELOPER
+      - OBSERVER
+      - PROBATION-PLATFORM-ADMIN
+      - PROBATION-MONITOR
+      - PROBATION-DEVELOPER
+      - PROBATION-OBSERVER
+      - PROBATION-MOON
+      - PROBATION-POD
+      - QUARANTINED
+      - MOON
+      - POD
+      - NETWORK
+      - BREAKGLASS
+      - NETWORK-JUMP
+      - P2P
+      - BACKEND-INFRA
+      - PUBLIC-INFRA
+      - HANDSET
+      - SENSOR-FEED
+      - SENSOR-TASKING
+      - SENSOR-TELEMETRY
+      - SENSOR-ARBITER
+      - EFFECTOR-CUE
+      - EFFECTOR-TRACK
+      - EFFECTOR-TELEMETRY
+      - EFFECTOR-COMMAND
+      - EFFECTOR-ARBITER
+      - KID
+      - EXTERNAL-KID
+      - EXTERNAL-INTERMEDIARY
+      - FUSION
+      - SENSOR
+      - EFFECTOR
+      - CONTROL
+      - PROBATION-GEAR

@@ -1,0 +1,4 @@
+# NARROWING — alice's P2P grant removed; her absent stays.
+version: 1
+scope: zagros-dev
+converge: enforce

@@ -1,0 +1,4 @@
+# An entry with nobody to ask and no reason given.
+version: 1
+scope: zagros-dev
+converge: enforce

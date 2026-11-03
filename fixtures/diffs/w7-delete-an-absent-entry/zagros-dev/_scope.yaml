@@ -1,0 +1,4 @@
+# WIDENING — gina's absent-only entry deleted: she gets OBSERVER back from her key.
+version: 1
+scope: zagros-dev
+converge: enforce

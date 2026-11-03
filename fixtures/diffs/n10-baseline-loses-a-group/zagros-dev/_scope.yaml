@@ -1,0 +1,4 @@
+# NARROWING — gina's manifest drops OBSERVER, so her declared device baseline shrinks.
+version: 1
+scope: zagros-dev
+converge: enforce

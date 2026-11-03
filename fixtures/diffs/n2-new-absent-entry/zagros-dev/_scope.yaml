@@ -1,0 +1,4 @@
+# NARROWING — a new entry that only takes a group away from bob.
+version: 1
+scope: zagros-dev
+converge: enforce

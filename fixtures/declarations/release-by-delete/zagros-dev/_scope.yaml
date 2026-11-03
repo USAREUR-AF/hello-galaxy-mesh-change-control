@@ -1,0 +1,5 @@
+# Scenario 01, step 3a — both holds released by DELETING the hold entries.
+# Same shape as goat's ops/warrant/membership/<scope>/; every peer is made up.
+version: 1
+scope: zagros-dev
+converge: enforce

@@ -1,0 +1,4 @@
+# PLATFORM-ADMIN granted to a machine (a peer whose name does not start peer-).
+version: 1
+scope: zagros-dev
+converge: enforce

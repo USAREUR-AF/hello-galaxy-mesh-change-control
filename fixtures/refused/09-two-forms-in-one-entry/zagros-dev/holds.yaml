@@ -1,0 +1,9 @@
+# Holds: quarantine, and dormancy (PROBATION) lanes.
+version: 1
+entries:
+  - peer: peer-carol-zagros-dev-2026-09-03-laptop
+    hold: quarantine
+    grant: [ZAGROS-DEV-OBSERVER]
+    owner: platform-admins
+    reason: quarantine but keep observer
+    expires: 2026-09-30

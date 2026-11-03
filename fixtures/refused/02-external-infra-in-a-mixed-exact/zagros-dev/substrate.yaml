@@ -1,0 +1,8 @@
+# Substrate and other machines.
+version: 1
+entries:
+  - peer: demo-service-01
+    exact: [ZAGROS-DEV-EXTERNAL-INFRA, ZAGROS-DEV-DEVELOPER]
+    owner: platform-admins
+    reason: external service host that also runs a developer's tools
+    expires: 2026-12-31

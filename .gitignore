@@ -1,0 +1,12 @@
+# runtime state written by the scenarios — never committed
+.run/
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# os noise
+.DS_Store

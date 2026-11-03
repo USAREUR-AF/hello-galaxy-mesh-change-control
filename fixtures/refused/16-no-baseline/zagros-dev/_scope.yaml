@@ -1,0 +1,4 @@
+# The generated baseline is missing.
+version: 1
+scope: zagros-dev
+converge: enforce

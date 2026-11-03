@@ -1,0 +1,49 @@
+{
+  "_about": "A made-up management-server state for scope zagros-dev: the four reads the converger makes (peers, groups, setup keys, the event log) plus which groups an enabled policy covers. Every peer, key and person here is fictional. ZAGROS-DEV-HANDSET is a device attribute (DNS for phones), in no ACL rule, so it is not in covered_groups.",
+  "groups": [
+    {"id": "g-all", "name": "All"},
+    {"id": "g-dns", "name": "mesh-dns"},
+    {"id": "g-ex", "name": "EX-DEMO-DEVELOPER"},
+    {"id": "g-infra", "name": "ZAGROS-DEV-INFRA"},
+    {"id": "g-dev", "name": "ZAGROS-DEV-DEVELOPER"},
+    {"id": "g-obs", "name": "ZAGROS-DEV-OBSERVER"},
+    {"id": "g-p2p", "name": "ZAGROS-DEV-P2P"},
+    {"id": "g-ext", "name": "ZAGROS-DEV-EXTERNAL-INFRA"},
+    {"id": "g-pa", "name": "ZAGROS-DEV-PLATFORM-ADMIN"},
+    {"id": "g-quar", "name": "ZAGROS-DEV-QUARANTINED"},
+    {"id": "g-kid", "name": "ZAGROS-DEV-KID"},
+    {"id": "g-handset", "name": "ZAGROS-DEV-HANDSET"}
+  ],
+  "covered_groups": ["All", "mesh-dns", "EX-DEMO-DEVELOPER", "ZAGROS-DEV-INFRA", "ZAGROS-DEV-DEVELOPER", "ZAGROS-DEV-OBSERVER", "ZAGROS-DEV-P2P", "ZAGROS-DEV-EXTERNAL-INFRA", "ZAGROS-DEV-PLATFORM-ADMIN", "ZAGROS-DEV-QUARANTINED"],
+  "setup_keys": [
+    {"id": "k-dev", "name": "zagros-dev-developer", "auto_groups": ["g-dev", "g-obs"]},
+    {"id": "k-infra", "name": "zagros-dev-infra", "auto_groups": ["g-infra"]},
+    {"id": "k-svc", "name": "zagros-dev-service", "auto_groups": ["g-dev"]},
+    {"id": "k-boot", "name": "zagros-dev-bootstrap", "auto_groups": []},
+    {"id": "k-hana-hs", "name": "peer-hana-zagros-dev-2026-09-08-handset", "auto_groups": ["g-obs", "g-handset"]}
+  ],
+  "events": [
+    {"activity": "Peer added", "initiator_id": "k-hana-hs", "target_id": "p-hana", "meta": {"setup_key_name": "peer-hana-zagros-dev-2026-09-08-handset"}},
+    {"activity": "Peer added", "initiator_id": "k-dev", "target_id": "p-gina", "meta": {"setup_key_name": "zagros-dev-developer"}},
+    {"activity": "Peer added", "initiator_id": "k-gone", "target_id": "p-erin", "meta": {"setup_key_name": "zagros-dev-2026-08-temp"}},
+    {"activity": "Peer added", "initiator_id": "k-infra", "target_id": "p-sensor", "meta": {"setup_key_name": "zagros-dev-infra"}},
+    {"activity": "Peer added", "initiator_id": "k-boot", "target_id": "p-mgmt", "meta": {"setup_key_name": "zagros-dev-bootstrap"}},
+    {"activity": "Peer added", "initiator_id": "k-dev", "target_id": "p-carol", "meta": {"setup_key_name": "zagros-dev-developer"}},
+    {"activity": "Peer added", "initiator_id": "k-svc", "target_id": "p-svc", "meta": {"setup_key_name": "zagros-dev-service"}},
+    {"activity": "Peer added", "initiator_id": "k-dev", "target_id": "p-bob", "meta": {"setup_key_name": "zagros-dev-developer"}},
+    {"activity": "Peer added", "initiator_id": "k-dev", "target_id": "p-alice", "meta": {"setup_key_name": "zagros-dev-developer"}},
+    {"activity": "User logged in peer", "initiator_id": "u-dave", "target_id": "p-dave", "meta": {}}
+  ],
+  "peers": [
+    {"id": "p-alice", "name": "peer-alice-zagros-dev-2026-09-01-laptop", "groups": ["All", "ZAGROS-DEV-DEVELOPER", "ZAGROS-DEV-OBSERVER"]},
+    {"id": "p-bob", "name": "peer-bob-zagros-dev-2026-09-02-laptop", "groups": ["All", "mesh-dns", "ZAGROS-DEV-DEVELOPER", "ZAGROS-DEV-OBSERVER", "ZAGROS-DEV-PLATFORM-ADMIN"]},
+    {"id": "p-svc", "name": "demo-service-01", "groups": ["All", "ZAGROS-DEV-DEVELOPER", "ZAGROS-DEV-EXTERNAL-INFRA"]},
+    {"id": "p-carol", "name": "peer-carol-zagros-dev-2026-09-03-laptop", "groups": ["All", "EX-DEMO-DEVELOPER", "ZAGROS-DEV-DEVELOPER", "ZAGROS-DEV-OBSERVER"]},
+    {"id": "p-dave", "name": "peer-dave-zagros-dev-2026-09-04-desktop", "groups": ["All", "ZAGROS-DEV-DEVELOPER", "ZAGROS-DEV-PLATFORM-ADMIN"]},
+    {"id": "p-erin", "name": "peer-erin-zagros-dev-2026-09-05-laptop", "groups": ["All", "ZAGROS-DEV-DEVELOPER"]},
+    {"id": "p-mgmt", "name": "mgmt-demo-01", "groups": ["All", "ZAGROS-DEV-INFRA"]},
+    {"id": "p-sensor", "name": "sensor-demo-01", "groups": ["All", "ZAGROS-DEV-INFRA"]},
+    {"id": "p-gina", "name": "peer-gina-zagros-dev-2026-09-06-laptop", "groups": ["All", "ZAGROS-DEV-DEVELOPER", "ZAGROS-DEV-OBSERVER"]},
+    {"id": "p-hana", "name": "peer-hana-zagros-dev-2026-09-08-iPhone", "groups": ["All", "ZAGROS-DEV-OBSERVER", "ZAGROS-DEV-HANDSET"]}
+  ]
+}

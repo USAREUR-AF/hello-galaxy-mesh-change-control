@@ -1,0 +1,4 @@
+# A group from another goatnet's prefix.
+version: 1
+scope: zagros-dev
+converge: enforce

@@ -1,0 +1,4 @@
+# Two entries for one peer, in two fragments.
+version: 1
+scope: zagros-dev
+converge: enforce

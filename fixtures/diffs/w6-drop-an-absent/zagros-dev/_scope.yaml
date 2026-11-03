@@ -1,0 +1,4 @@
+# WIDENING — alice no longer kept out of OBSERVER.
+version: 1
+scope: zagros-dev
+converge: enforce

@@ -1,0 +1,13 @@
+# Holds: quarantine, and dormancy (PROBATION) lanes.
+version: 1
+entries:
+  - peer: peer-alice-zagros-dev-2026-09-01-laptop
+    hold: quarantine                        # one entry per peer: the hold REPLACES her grant entry
+    owner: platform-admins
+    reason: credential suspected leaked, under investigation
+    expires: 2026-09-30
+  - peer: peer-carol-zagros-dev-2026-09-03-laptop
+    hold: quarantine
+    owner: platform-admins
+    reason: signal flood from this device, under investigation
+    expires: 2026-09-30

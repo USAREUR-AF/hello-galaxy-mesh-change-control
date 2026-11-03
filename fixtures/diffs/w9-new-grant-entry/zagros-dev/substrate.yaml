@@ -1,0 +1,7 @@
+# Substrate and other machines.
+version: 1
+entries:
+  - peer: mgmt-demo-01
+    exact: [ZAGROS-DEV-INFRA, ZAGROS-DEV-MONITOR]
+    owner: platform-admins
+    reason: management host

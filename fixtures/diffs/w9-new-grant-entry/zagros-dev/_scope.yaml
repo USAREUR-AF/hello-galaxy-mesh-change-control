@@ -1,0 +1,4 @@
+# WIDENING — a new entry granting bob P2P.
+version: 1
+scope: zagros-dev
+converge: enforce

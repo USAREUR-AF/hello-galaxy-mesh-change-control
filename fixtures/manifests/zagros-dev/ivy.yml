@@ -1,0 +1,9 @@
+# Made-up operator manifest: revoked, so it contributes nothing to the baseline.
+identity:
+  handle: ivy
+  status: revoked
+  type: person
+netbird:
+  enabled: true
+  auto_groups: [DEVELOPER, OBSERVER]
+  sites: [zagros-dev]

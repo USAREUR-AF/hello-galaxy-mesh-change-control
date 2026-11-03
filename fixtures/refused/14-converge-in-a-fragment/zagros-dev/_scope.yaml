@@ -1,0 +1,4 @@
+# A fragment that carries converge: — only _scope.yaml may.
+version: 1
+scope: zagros-dev
+converge: enforce
