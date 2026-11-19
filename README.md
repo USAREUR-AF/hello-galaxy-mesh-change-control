@@ -1,5 +1,10 @@
 # hello-galaxy-mesh-change-control
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/figures/change-path-dark.svg">
+  <img src="docs/figures/change-path-light.svg" width="760" alt="On a governed goatnet a change to network access is a pull request that adds a grant, a hold or a release under ops/warrant/membership/<scope>/. CI refuses sixteen kinds of bad declaration and grades the diff: one that only takes access away merges on one owner's click, one that gives access waits for review. After merge a converger running as a machine account makes the NetBird groups match every five minutes and puts back hand edits. The everyday dashboard reaches the management API through a read-only door: GET returns 200, POST returns 403.">
+</picture>
+
 **How network access changes on a governed goatnet. The NetBird dashboard is for looking.
 Which peer holds which group, and which groups may reach which, change through
 warrant: a reviewed diff in git, applied by a machine account. This repo lets you
